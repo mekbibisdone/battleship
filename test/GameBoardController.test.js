@@ -11,21 +11,26 @@ describe("Create Game Board", () => {
       "createGameBoard expects two arguments",
     );
   });
-  it("returns a board with the width and height of the given parameters", () => {
-    const height = 20;
-    const width = 20;
-    const board = Array(height).fill(Array(width).fill(null));
+  it("throws an error when the given parameters are below the range", () => {
+    expect(() => createGameBoardController().createGameBoard(0, 0)).toThrow(
+      "parameters are below range",
+    );
+  });
+  it("returns a board with the given parameters", () => {
+    const board = Array(20)
+      .fill(null)
+      .map(() => Array(20).fill(null));
     const testGameBoard = {
       board,
       ships: [],
     };
-    expect(createGameBoardController().createGameBoard(width, height)).toEqual(
+    expect(createGameBoardController().createGameBoard(20, 20)).toEqual(
       testGameBoard,
     );
   });
 });
 describe("Place ship", () => {
-  it("throws an error when board, coordinates and ship are not given", () => {
+  it("throws an error when board, coordinates and ships are not given", () => {
     expect(() => createGameBoardController().placeShip()).toThrow(
       "placeShip expects three arguments",
     );

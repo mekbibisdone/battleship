@@ -1,10 +1,11 @@
 export default function createGameBoardController() {
-  function createGameBoard(height, length) {
-    if (height === undefined || length === undefined)
+  function createGameBoard(x, y) {
+    if (x === undefined || y === undefined)
       throw new Error("createGameBoard expects two arguments");
-    const board = Array(height)
+    if (x < 1 || y < 1) throw new Error("parameters are below range");
+    const board = Array(x)
       .fill(null)
-      .map(() => Array(length).fill(null));
+      .map(() => Array(y).fill(null));
 
     const gameBoard = {
       board,
