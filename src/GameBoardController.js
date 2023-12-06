@@ -1,14 +1,24 @@
-export default function GameBoardController() {
+export default function createGameBoardController() {
   function createGameBoard(height, length) {
     if (height === undefined || length === undefined)
       throw new Error("createGameBoard expects two arguments");
     const board = Array(height)
       .fill(null)
       .map(() => Array(length).fill(null));
-    return board;
+
+    const gameBoard = {
+      board,
+      ships: [],
+    };
+
+    return gameBoard;
   }
-  function placeShip(coordinates, ship, board) {
-    if (coordinates === undefined || ship == undefined || board === undefined)
+  function placeShip(coordinates, ship, gameBoard) {
+    if (
+      coordinates === undefined ||
+      ship == undefined ||
+      gameBoard === undefined
+    )
       throw new Error("placeShip expects three arguments");
     let beginning = coordinates.beginning;
     let end = coordinates.end;
@@ -19,25 +29,70 @@ export default function GameBoardController() {
     }
     if (beginning < 0 || end < 0) throw new Error("coordinates out of range");
 
-    const boardCopy = JSON.parse(JSON.stringify(board));
+    const gameBoardCopy = JSON.parse(JSON.stringify(gameBoard));
     let length = ship.length;
-    if (coordinates.vertical) {
-      if (beginning >= boardCopy[0].length || end >= boardCopy[0].length)
+
+    if (end - beginning === 1 || end - beginning === 0) {
+      gameBoardCopy.board[beginning][end] = ship;
+    } else if (coordinates.vertical) {
+      if (
+        beginning >= gameBoardCopy.board[0].length ||
+        end > gameBoardCopy.board[0].length
+      )
         throw new Error("coordinates out of range");
-      for (let i = beginning; i <= end; i++) {
-        boardCopy[i][beginning] = ship;
+      for (let i = beginning; i < end; i++) {
+        gameBoardCopy.board[i][beginning] = ship;
         length = length - 1;
         if (length === 0) break;
       }
     } else {
-      if (beginning >= boardCopy.length || end >= boardCopy.length)
+      if (
+        beginning >= gameBoardCopy.board.length ||
+        end > gameBoardCopy.board.length
+      )
         throw new Error("coordinates out of range");
-      for (let i = beginning; i <= end; i++) {
-        boardCopy[beginning][i] = ship;
+      for (let i = beginning; i < end; i++) {
+        gameBoardCopy.board[beginning][i] = ship;
       }
     }
-    return boardCopy;
+    ship.id = gameBoardCopy.ships.length;
+    gameBoardCopy.ships.push(ship);
+    return gameBoardCopy;
+  }
+  function receiveAttack(coordinates, gameBoard, shipController) {
+    if (
+      coordinates === undefined ||
+      gameBoard === undefined ||
+      shipController == undefined
+    )
+      throw new Error("receive attack expects three arguments");
+    if (
+      coordinates.x < 0 ||
+      coordinates.y < 0 ||
+      coordinates.x >= gameBoard.board.length ||
+      coordinates.y >= gameBoard.board[0].length
+    )
+      throw new Error("coordinates our of range");
+
+    const gameBoardCopy = JSON.parse(JSON.stringify(gameBoard));
+    if (gameBoardCopy.board[coordinates.x][coordinates.y] === null) {
+      gameBoardCopy.board[0][0] = 0;
+      return gameBoardCopy;
+    } else if (
+      gameBoardCopy.board[coordinates.x][coordinates.y] !== null &&
+      gameBoardCopy.board[coordinates.x][coordinates.y] !== 0 &&
+      gameBoardCopy.board[coordinates.x][coordinates.y] !== 1
+    ) {
+      const hitShip = shipController.hit(
+        gameBoardCopy.board[coordinates.x][coordinates.y],
+      );
+
+      gameBoardCopy.ships[hitShip.id] = hitShip;
+      gameBoardCopy.board[coordinates.x][coordinates.y] = 1;
+      return gameBoardCopy;
+    }
+    throw new Error("board has already received an attack at the coordinates");
   }
 
-  return { createGameBoard, placeShip };
+  return { createGameBoard, placeShip, receiveAttack };
 }
