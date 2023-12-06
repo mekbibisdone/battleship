@@ -1,25 +1,24 @@
-export default function createShip(length) {
-  if (length !== undefined && length <= 0)
-    throw new Error("passed length has to be greater than 0");
-  if (length === undefined) throw new Error("createShip expects one argument");
-
-  let hitCount = 0;
-  const shipLength = length;
-
-  function increaseHitCount() {
-    if (hitCount === shipLength) throw new Error("Ship has already sunk");
-    hitCount += 1;
-    return hitCount;
+export default function ShipController() {
+  function createShip(length) {
+    if (length !== undefined && length <= 0)
+      throw new Error("passed length has to be greater than 0");
+    if (length === undefined)
+      throw new Error("createShip expects one argument");
+    let hitCount = 0;
+    return {
+      length,
+      hitCount,
+    };
   }
-  function getHitCount() {
-    return hitCount;
+  function hit(ship) {
+    if (ship.length === ship.hitCount) throw new Error("Ship has already sunk");
+    const shipCopy = JSON.parse(JSON.stringify(ship));
+    shipCopy.hitCount += 1;
+    return shipCopy;
   }
-  function isSunk() {
-    if (hitCount === shipLength) return true;
-    return false;
+  function isSunk(ship) {
+    if (ship.length !== ship.hitCount) return false;
+    return true;
   }
-  function getLength() {
-    return length;
-  }
-  return { getLength, increaseHitCount, getHitCount, isSunk };
+  return { createShip, hit, isSunk };
 }
