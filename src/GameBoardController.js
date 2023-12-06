@@ -31,7 +31,8 @@ export default function createGameBoardController() {
 
     const gameBoardCopy = JSON.parse(JSON.stringify(gameBoard));
     let length = ship.length;
-
+    if (length > end - beginning && end - beginning !== 0)
+      throw new Error("ship is too big to fit");
     if (end - beginning === 1 || end - beginning === 0) {
       if (gameBoardCopy.board[beginning][end] !== null)
         throw new Error("the place of the coordinates already has a ship");
@@ -59,6 +60,8 @@ export default function createGameBoardController() {
         if (gameBoardCopy.board[beginning][i] !== null)
           throw new Error("the place of the coordinates already has a ship");
         gameBoardCopy.board[beginning][i] = ship;
+        length = length - 1;
+        if (length === 0) break;
       }
     }
     ship.id = gameBoardCopy.ships.length;

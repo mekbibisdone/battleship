@@ -174,7 +174,30 @@ describe("Place ship", () => {
     );
     expect(gameBoardWithShip).toEqual(testGameBoard);
   });
-  it("returns a board with a ship placed as long as it's length is equal or smaller than the difference between the coordinates when vertical is true", () => {
+
+  it("returns a board with a ship placed as long as it's length is equal or smaller than the difference between the coordinates", () => {
+    const testBoard = Array(10)
+      .fill(null)
+      .map(() => Array(10).fill(null));
+    const testShip = { length: 1 };
+    testBoard[4][4] = testShip;
+    const testGameBoard = {
+      board: testBoard,
+      ships: [testShip],
+    };
+    const coordinates = { beginning: 4, end: 6, vertical: false };
+    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
+      10,
+      10,
+    );
+    const gameBoardWithShip = createGameBoardController().placeShip(
+      coordinates,
+      testShip,
+      gameBoardWithoutShip,
+    );
+    expect(gameBoardWithShip).toEqual(testGameBoard);
+  });
+  it("returns a board with a ship placed as long as it's length is equal or smaller than the difference between the coordinates and when vertical is true", () => {
     const testBoard = Array(10)
       .fill(null)
       .map(() => Array(10).fill(null));
@@ -195,6 +218,21 @@ describe("Place ship", () => {
       gameBoardWithoutShip,
     );
     expect(gameBoardWithShip).toEqual(testGameBoard);
+  });
+  it("throws an error if the ship's length is bigger than the difference between the coordinates", () => {
+    const testShip = { length: 3 };
+    const coordinates = { beginning: 4, end: 6, vertical: false };
+    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
+      10,
+      10,
+    );
+    expect(() =>
+      createGameBoardController().placeShip(
+        coordinates,
+        testShip,
+        gameBoardWithoutShip,
+      ),
+    ).toThrow("ship is too big to fit");
   });
   it("throws an error if the coordinates are below the range", () => {
     const testShip = {};
