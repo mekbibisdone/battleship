@@ -33,6 +33,8 @@ export default function createGameBoardController() {
     let length = ship.length;
 
     if (end - beginning === 1 || end - beginning === 0) {
+      if (gameBoardCopy.board[beginning][end] !== null)
+        throw new Error("the place of the coordinates already has a ship");
       gameBoardCopy.board[beginning][end] = ship;
     } else if (coordinates.vertical) {
       if (
@@ -41,6 +43,8 @@ export default function createGameBoardController() {
       )
         throw new Error("coordinates out of range");
       for (let i = beginning; i < end; i++) {
+        if (gameBoardCopy.board[beginning][i] !== null)
+          throw new Error("the place of the coordinates already has a ship");
         gameBoardCopy.board[i][beginning] = ship;
         length = length - 1;
         if (length === 0) break;
@@ -52,6 +56,8 @@ export default function createGameBoardController() {
       )
         throw new Error("coordinates out of range");
       for (let i = beginning; i < end; i++) {
+        if (gameBoardCopy.board[beginning][i] !== null)
+          throw new Error("the place of the coordinates already has a ship");
         gameBoardCopy.board[beginning][i] = ship;
       }
     }

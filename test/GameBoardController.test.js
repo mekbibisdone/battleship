@@ -241,6 +241,66 @@ describe("Place ship", () => {
       ),
     ).toThrow("coordinates out of range");
   });
+  it("throws an error if the coordinates we are trying to place on already has a ship", () => {
+    const boardWithoutShip = createGameBoardController().createGameBoard(
+      10,
+      10,
+    );
+    const testShip = createShipController().createShip(1);
+    const coordinates = { beginning: 0, end: 0, vertical: false };
+    const boardWithShip = createGameBoardController().placeShip(
+      coordinates,
+      testShip,
+      boardWithoutShip,
+    );
+    expect(() =>
+      createGameBoardController().placeShip(
+        coordinates,
+        testShip,
+        boardWithShip,
+      ),
+    ).toThrow("the place of the coordinates already has a ship");
+  });
+  it("throws an error if the coordinates we are trying to place on already has a ship and the ship length is more than one", () => {
+    const boardWithoutShip = createGameBoardController().createGameBoard(
+      10,
+      10,
+    );
+    const testShip = createShipController().createShip(2);
+    const coordinates = { beginning: 1, end: 3, vertical: false };
+    const boardWithShip = createGameBoardController().placeShip(
+      coordinates,
+      testShip,
+      boardWithoutShip,
+    );
+    expect(() =>
+      createGameBoardController().placeShip(
+        coordinates,
+        testShip,
+        boardWithShip,
+      ),
+    ).toThrow("the place of the coordinates already has a ship");
+  });
+  it("throws an error if the coordinates we are trying to place on already has a ship and vertical is set to true", () => {
+    const boardWithoutShip = createGameBoardController().createGameBoard(
+      10,
+      10,
+    );
+    const testShip = createShipController().createShip(2);
+    const coordinates = { beginning: 1, end: 3, vertical: true };
+    const boardWithShip = createGameBoardController().placeShip(
+      coordinates,
+      testShip,
+      boardWithoutShip,
+    );
+    expect(() =>
+      createGameBoardController().placeShip(
+        coordinates,
+        testShip,
+        boardWithShip,
+      ),
+    ).toThrow("the place of the coordinates already has a ship");
+  });
 });
 
 describe("Receive Attack", () => {
