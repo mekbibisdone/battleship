@@ -1,5 +1,5 @@
 import createGameBoardController from "../src/GameBoardController";
-import createShipController from "../src/ship";
+import createShipController from "../src/ShipController";
 describe("Create Game Board", () => {
   it("throws an error when no parameters are given", () => {
     expect(() => createGameBoardController().createGameBoard()).toThrow(

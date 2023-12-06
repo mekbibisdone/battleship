@@ -1,4 +1,4 @@
-import ShipController from "../src/ship";
+import ShipController from "../src/ShipController";
 
 it("throws an error when given no arguments", () => {
   expect(() => ShipController().createShip()).toThrow(
