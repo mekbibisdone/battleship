@@ -403,7 +403,6 @@ describe("Receive Attack", () => {
     const testGameBoard = createGameBoardController().createGameBoard(10, 10);
     testGameBoard.board[0][0] = 1;
     const testShip = createShipController().createShip(1);
-    testGameBoard.ships.push(testShip);
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -468,7 +467,7 @@ describe("Receive Attack", () => {
       ),
     ).toThrow("board has already received an attack at the coordinates");
   });
-  it("throws an error if the place of the coordinates has already recorded a hit", () => {
+  it("throws an error if the place of the coordinates has already recorded a miss", () => {
     const gameBoardWithoutRecord = createGameBoardController().createGameBoard(
       10,
       10,
