@@ -44,7 +44,7 @@ describe("Place ship", () => {
     const testBoard = Array(10)
       .fill(null)
       .map(() => Array(10).fill(null));
-    const testShip = { length: 5 };
+    const testShip = { id: 0, length: 5 };
     testBoard[0][0] = testShip;
     testBoard[0][1] = testShip;
     testBoard[0][2] = testShip;
@@ -54,7 +54,7 @@ describe("Place ship", () => {
       board: testBoard,
       ships: [testShip],
     };
-    const coordinates = { beginning: 0, end: 5 };
+    const coordinates = { outer: 0, inner: 0 };
     const boardWithOutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -75,7 +75,7 @@ describe("Place ship", () => {
       ships: [],
     };
     const testShip = {};
-    const coordinates = { beginning: 0, end: 0 };
+    const coordinates = { outer: 0, inner: 0 };
     const boardWithShip = createGameBoardController().placeShip(
       coordinates,
       testShip,
@@ -87,7 +87,7 @@ describe("Place ship", () => {
     const testBoard = Array(10)
       .fill(null)
       .map(() => Array(10).fill(null));
-    const testShip = { length: 5 };
+    const testShip = { id: 0, length: 5 };
     testBoard[4][4] = testShip;
     testBoard[5][4] = testShip;
     testBoard[6][4] = testShip;
@@ -97,7 +97,7 @@ describe("Place ship", () => {
       board: testBoard,
       ships: [testShip],
     };
-    const coordinates = { beginning: 4, end: 9, vertical: true };
+    const coordinates = { outer: 4, inner: 4, vertical: true };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -108,140 +108,10 @@ describe("Place ship", () => {
       gameBoardWithoutShip,
     );
     expect(gameBoardWithShip).toEqual(testGameBoard);
-  });
-  it("returns a board with a ship placed when the beginning is greater than end", () => {
-    const testBoard = Array(10)
-      .fill(null)
-      .map(() => Array(10).fill(null));
-    const testShip = { length: 5 };
-    testBoard[4][4] = testShip;
-    testBoard[5][4] = testShip;
-    testBoard[6][4] = testShip;
-    testBoard[7][4] = testShip;
-    testBoard[8][4] = testShip;
-    const testGameBoard = {
-      board: testBoard,
-      ships: [testShip],
-    };
-    const coordinates = { beginning: 9, end: 4, vertical: true };
-    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    const gameBoardWithShip = createGameBoardController().placeShip(
-      coordinates,
-      testShip,
-      gameBoardWithoutShip,
-    );
-    expect(gameBoardWithShip).toEqual(testGameBoard);
-  });
-  it("returns a board with a ship placed when the beginning and the end have a difference of one", () => {
-    const testBoard = Array(10)
-      .fill(null)
-      .map(() => Array(10).fill(null));
-    const testShip = { length: 1 };
-    testBoard[0][1] = testShip;
-    const testGameBoard = {
-      board: testBoard,
-      ships: [testShip],
-    };
-    const coordinates = { beginning: 0, end: 1, vertical: false };
-    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    const gameBoardWithShip = createGameBoardController().placeShip(
-      coordinates,
-      testShip,
-      gameBoardWithoutShip,
-    );
-    expect(gameBoardWithShip).toEqual(testGameBoard);
-  });
-  it("returns a board with a ship placed when the beginning and the end have a difference of zero", () => {
-    const testBoard = Array(10)
-      .fill(null)
-      .map(() => Array(10).fill(null));
-    const testShip = { length: 1 };
-    testBoard[0][0] = testShip;
-    const testGameBoard = {
-      board: testBoard,
-      ships: [testShip],
-    };
-    const coordinates = { beginning: 0, end: 0, vertical: false };
-    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    const gameBoardWithShip = createGameBoardController().placeShip(
-      coordinates,
-      testShip,
-      gameBoardWithoutShip,
-    );
-    expect(gameBoardWithShip).toEqual(testGameBoard);
-  });
-
-  it("returns a board with a ship placed as long as it's length is equal or smaller than the difference between the coordinates", () => {
-    const testBoard = Array(10)
-      .fill(null)
-      .map(() => Array(10).fill(null));
-    const testShip = { length: 1 };
-    testBoard[4][4] = testShip;
-    const testGameBoard = {
-      board: testBoard,
-      ships: [testShip],
-    };
-    const coordinates = { beginning: 4, end: 6, vertical: false };
-    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    const gameBoardWithShip = createGameBoardController().placeShip(
-      coordinates,
-      testShip,
-      gameBoardWithoutShip,
-    );
-    expect(gameBoardWithShip).toEqual(testGameBoard);
-  });
-  it("returns a board with a ship placed as long as it's length is equal or smaller than the difference between the coordinates and when vertical is true", () => {
-    const testBoard = Array(10)
-      .fill(null)
-      .map(() => Array(10).fill(null));
-    const testShip = { length: 1 };
-    testBoard[4][4] = testShip;
-    const testGameBoard = {
-      board: testBoard,
-      ships: [testShip],
-    };
-    const coordinates = { beginning: 4, end: 6, vertical: true };
-    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    const gameBoardWithShip = createGameBoardController().placeShip(
-      coordinates,
-      testShip,
-      gameBoardWithoutShip,
-    );
-    expect(gameBoardWithShip).toEqual(testGameBoard);
-  });
-  it("throws an error if the ship's length is bigger than the difference between the coordinates", () => {
-    const testShip = { length: 3 };
-    const coordinates = { beginning: 4, end: 6, vertical: false };
-    const gameBoardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    expect(() =>
-      createGameBoardController().placeShip(
-        coordinates,
-        testShip,
-        gameBoardWithoutShip,
-      ),
-    ).toThrow("ship is too big to fit");
   });
   it("throws an error if the coordinates are below the range", () => {
     const testShip = {};
-    const coordinates = { beginning: -2, end: -3, vertical: true };
+    const coordinates = { outer: -2, inner: -3, vertical: true };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -254,9 +124,9 @@ describe("Place ship", () => {
       ),
     ).toThrow("coordinates out of range");
   });
-  it("throws an error if the coordinates are above the range of the outer dimension when vertical is false", () => {
+  it("throws an error if the coordinates are above the range of the outer dimension", () => {
     const testShip = {};
-    const coordinates = { beginning: 9, end: 11, vertical: false };
+    const coordinates = { outer: 9, inner: 10, vertical: false };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -271,7 +141,7 @@ describe("Place ship", () => {
   });
   it("throws an error if the coordinates are above the range of the inner dimension when vertical is true", () => {
     const ship = {};
-    const coordinates = { beginning: 8, end: 11, vertical: true };
+    const coordinates = { outer: 8, inner: 11, vertical: true };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -290,27 +160,7 @@ describe("Place ship", () => {
       10,
     );
     const testShip = createShipController().createShip(1);
-    const coordinates = { beginning: 0, end: 0, vertical: false };
-    const boardWithShip = createGameBoardController().placeShip(
-      coordinates,
-      testShip,
-      boardWithoutShip,
-    );
-    expect(() =>
-      createGameBoardController().placeShip(
-        coordinates,
-        testShip,
-        boardWithShip,
-      ),
-    ).toThrow("the place of the coordinates already has a ship");
-  });
-  it("throws an error if the coordinates we are trying to place on already has a ship and the ship length is more than one", () => {
-    const boardWithoutShip = createGameBoardController().createGameBoard(
-      10,
-      10,
-    );
-    const testShip = createShipController().createShip(2);
-    const coordinates = { beginning: 1, end: 3, vertical: false };
+    const coordinates = { outer: 0, inner: 0, vertical: false };
     const boardWithShip = createGameBoardController().placeShip(
       coordinates,
       testShip,
@@ -330,7 +180,7 @@ describe("Place ship", () => {
       10,
     );
     const testShip = createShipController().createShip(2);
-    const coordinates = { beginning: 1, end: 3, vertical: true };
+    const coordinates = { outer: 1, inner: 3, vertical: true };
     const boardWithShip = createGameBoardController().placeShip(
       coordinates,
       testShip,
@@ -408,7 +258,7 @@ describe("Receive Attack", () => {
       10,
     );
     const hitCoordinates = { x: 0, y: 0 };
-    const placeCoordinates = { beginning: 0, end: 0, vertical: false };
+    const placeCoordinates = { outer: 0, inner: 0, vertical: false };
     const gameBoardWithShip = createGameBoardController().placeShip(
       placeCoordinates,
       testShip,
@@ -446,7 +296,7 @@ describe("Receive Attack", () => {
       10,
       10,
     );
-    const placeCoordinates = { beginning: 0, end: 0, vertical: false };
+    const placeCoordinates = { outer: 0, inner: 0, vertical: false };
 
     const gameBoardWithShip = createGameBoardController().placeShip(
       placeCoordinates,
@@ -496,7 +346,7 @@ describe("Receive Attack", () => {
     };
     testGameBoard.ships.push(testShip);
     const hitCoordinates = { x: 0, y: 0 };
-    const placeCoordinates = { beginning: 0, end: 0, vertical: false };
+    const placeCoordinates = { outer: 0, inner: 0, vertical: false };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
       10,
@@ -531,8 +381,8 @@ describe("Receive Attack", () => {
     testGameBoard.board[4][4] = 1;
     testGameBoard.ships.push(testShipOne, testShipTwo);
     const testShipOnePlaceCoordinates = {
-      beginning: 0,
-      end: 0,
+      outer: 0,
+      inner: 0,
       vertical: false,
     };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
@@ -545,8 +395,8 @@ describe("Receive Attack", () => {
       gameBoardWithoutShip,
     );
     const testShipTwoPlaceCoordinates = {
-      beginning: 4,
-      end: 4,
+      outer: 4,
+      inner: 4,
       vertical: true,
     };
     const gameBoardWithTwoShip = createGameBoardController().placeShip(
