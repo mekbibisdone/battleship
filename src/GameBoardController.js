@@ -34,12 +34,16 @@ export default function createGameBoardController() {
     const shipCopy = { ...ship };
     if (coordinates.vertical) {
       for (let i = 0; i < shipCopy.length; i++) {
+        if (gameBoardCopy.board[outer + i] === undefined)
+          throw new Error("ship is too big to fit");
         if (gameBoardCopy.board[outer + i][inner] !== null)
           throw new Error("the place of the coordinates already has a ship");
         gameBoardCopy.board[outer + i][inner] = shipCopy;
       }
     } else {
       for (let i = 0; i < shipCopy.length; i++) {
+        if (gameBoardCopy.board[outer][inner + i] === undefined)
+          throw new Error("ship is too big to fit");
         if (gameBoardCopy.board[outer][inner + i] !== null)
           throw new Error("the place of the coordinates already has a ship");
         gameBoardCopy.board[outer][inner + i] = shipCopy;

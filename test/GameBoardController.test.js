@@ -194,6 +194,30 @@ describe("Place ship", () => {
       ),
     ).toThrow("the place of the coordinates already has a ship");
   });
+  it("throws an error if the ship is too big to fit", () => {
+    const boardWithoutShip = createGameBoardController().createGameBoard(1, 1);
+    const testShip = createShipController().createShip(2);
+    const coordinates = { outer: 0, inner: 0, vertical: false };
+    expect(() =>
+      createGameBoardController().placeShip(
+        coordinates,
+        testShip,
+        boardWithoutShip,
+      ),
+    ).toThrow("ship is too big to fit");
+  });
+  it("throws an error if the ship is too big to fit when vertical is true", () => {
+    const boardWithoutShip = createGameBoardController().createGameBoard(1, 1);
+    const testShip = createShipController().createShip(2);
+    const coordinates = { outer: 0, inner: 0, vertical: true };
+    expect(() =>
+      createGameBoardController().placeShip(
+        coordinates,
+        testShip,
+        boardWithoutShip,
+      ),
+    ).toThrow("ship is too big to fit");
+  });
 });
 
 describe("Receive Attack", () => {
