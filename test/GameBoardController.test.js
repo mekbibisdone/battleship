@@ -564,3 +564,88 @@ describe("Receive Attack", () => {
     ).toEqual(testGameBoard);
   });
 });
+
+describe("check if all Ships have Sunk", () => {
+  it("throws an error if both arguments are not given", () => {
+    expect(() => createGameBoardController().haveAllShipSunk()).toThrow(
+      "haveAllShipSunk expects two argument",
+    );
+  });
+  it("throws an error if one of the arguments is not given", () => {
+    expect(() => createGameBoardController().haveAllShipSunk({})).toThrow(
+      "haveAllShipSunk expects two argument",
+    );
+  });
+  it("returns true if there are no ships", () => {
+    const ships = [];
+    expect(
+      createGameBoardController().haveAllShipSunk(
+        ships,
+        createShipController(),
+      ),
+    ).toBe(true);
+  });
+  it("returns false if there is one ship and it has not sunk", () => {
+    const ships = [createShipController().createShip(1)];
+    expect(
+      createGameBoardController().haveAllShipSunk(
+        ships,
+        createShipController(),
+      ),
+    ).toBe(false);
+  });
+  it("returns true if there is one ship and it has sunk", () => {
+    const shipController = createShipController();
+    const sunkShip = shipController.hit(shipController.createShip(1));
+    expect(
+      createGameBoardController().haveAllShipSunk([sunkShip], shipController),
+    ).toBe(true);
+  });
+  it("returns false if there are two ships and both have not sunk", () => {
+    const shipController = createShipController();
+    const ships = [shipController.createShip(1), shipController.createShip(1)];
+    expect(
+      createGameBoardController().haveAllShipSunk(ships, shipController),
+    ).toBe(false);
+  });
+  it("returns false if there are two ships and one has sunk but the other hasn't", () => {
+    const shipController = createShipController();
+    const sunkShip = shipController.hit(shipController.createShip(1));
+    const ships = [sunkShip, shipController.createShip(1)];
+    expect(
+      createGameBoardController().haveAllShipSunk(ships, shipController),
+    ).toBe(false);
+  });
+  it("returns true if there are two ships and both have sunk", () => {
+    const shipController = createShipController();
+    const ships = [
+      shipController.hit(shipController.createShip(1)),
+      shipController.hit(shipController.createShip(1)),
+    ];
+    expect(
+      createGameBoardController().haveAllShipSunk(ships, shipController),
+    ).toBe(true);
+  });
+  it("returns false if there are three ships and two have sunk but one hasn't", () => {
+    const shipController = createShipController();
+    const ships = [
+      shipController.hit(shipController.createShip(1)),
+      shipController.hit(shipController.createShip(1)),
+      shipController.createShip(1),
+    ];
+    expect(
+      createGameBoardController().haveAllShipSunk(ships, shipController),
+    ).toBe(false);
+  });
+  it("returns true if there are three ships and all have sunk", () => {
+    const shipController = createShipController();
+    const ships = [
+      shipController.hit(shipController.createShip(1)),
+      shipController.hit(shipController.createShip(1)),
+      shipController.hit(shipController.createShip(1)),
+    ];
+    expect(
+      createGameBoardController().haveAllShipSunk(ships, shipController),
+    ).toBe(true);
+  });
+});

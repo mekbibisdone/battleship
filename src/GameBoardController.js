@@ -103,6 +103,19 @@ export default function createGameBoardController() {
     }
     throw new Error("board has already received an attack at the coordinates");
   }
+  function haveAllShipSunk(ships, shipController) {
+    if (ships === undefined || shipController === undefined)
+      throw new Error("haveAllShipSunk expects two argument");
+    const allSunk = ships.reduce((previousShip, currentShip) => {
+      return previousShip && shipController.isSunk(currentShip);
+    }, true);
+    return allSunk;
+  }
 
-  return { createGameBoard, placeShip, receiveAttack };
+  return {
+    createGameBoard,
+    placeShip,
+    receiveAttack,
+    haveAllShipSunk,
+  };
 }
