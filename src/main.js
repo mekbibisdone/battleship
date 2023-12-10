@@ -1,10 +1,24 @@
 import "./style.css";
 import GameController from "./GameController";
-const playerBoard = document.querySelector(".boardLeft");
-const AIBoard = document.querySelector(".boardRight");
+createGameBoard();
 
-createCells(playerBoard, "player");
-createCells(AIBoard, "AI");
+function createGameBoard() {
+  const boards = document.querySelector(".boards");
+  const playerBoard = document.createElement("div");
+  playerBoard.classList.toggle("boardLeft");
+  const AIBoard = document.createElement("div");
+  AIBoard.classList.toggle("boardRight");
+  const resetButton = document.createElement("button");
+  resetButton.textContent = "Reset";
+  resetButton.classList.toggle("reset");
+  resetButton.addEventListener("click", resetGame);
+  const winnerStatus = document.createElement("h1");
+  winnerStatus.classList.toggle("winner");
+  boards.append(playerBoard, resetButton, AIBoard, winnerStatus);
+  createCells(playerBoard, "player");
+  createCells(AIBoard, "AI");
+}
+
 function createCells(board, boardOwner) {
   const width = board.offsetWidth;
   const height = board.offsetHeight;
@@ -77,4 +91,11 @@ function handleWinStatus(win) {
   AIBoardCells.forEach((AIBoardCell) => {
     AIBoardCell.removeEventListener("click", attackAIShips);
   });
+}
+
+function resetGame() {
+  const boards = document.querySelector(".boards");
+  boards.textContent = "";
+  GameController.resetGame();
+  createGameBoard();
 }

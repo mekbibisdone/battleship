@@ -9,7 +9,7 @@
 .boards {
   display: grid;
   padding: 10px;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: 1fr 100px 1fr;
   justify-items: center;
 }
 .boardLeft, .boardRight {
@@ -24,3 +24,8 @@
   align-items: center;
 }
 
+.reset {
+  align-self: center;
+  padding: 10px;
+  border-radius: 4px;
+}

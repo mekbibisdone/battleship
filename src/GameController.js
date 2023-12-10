@@ -80,11 +80,17 @@ export default (function GameController() {
       return true;
     return false;
   }
+  function resetGame() {
+    AIGameBoard = placeAIShips();
+    playerGameBoard = gameBoardController.createGameBoard(10, 10);
+    playerGameBoard = placePlayerShips();
+  }
   return {
     getAIGameBoard,
     getPlayerGameBoard,
     attackAIShips,
     attackPlayerShips,
     isGameOver,
+    resetGame,
   };
 })();
