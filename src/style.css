@@ -12,10 +12,15 @@
   grid-template-columns: repeat(2,1fr);
   justify-items: center;
 }
-.boards > div {
+.boardLeft, .boardRight {
   display: grid;
   width: 400px;
   height: 400px;
   border: 1px solid black;
+  text-align: center;
+}
+.boardLeft > div, .boardRight > div{
+  display: grid;
+  align-items: center;
 }
 
