@@ -71,7 +71,7 @@ export default function createGameBoardController() {
 
     const gameBoardCopy = JSON.parse(JSON.stringify(gameBoard));
     if (gameBoardCopy.board[coordinates.outer][coordinates.inner] === null) {
-      gameBoardCopy.board[0][0] = 0;
+      gameBoardCopy.board[coordinates.outer][coordinates.inner] = 0;
       return gameBoardCopy;
     } else if (
       gameBoardCopy.board[coordinates.outer][coordinates.inner] !== null &&
