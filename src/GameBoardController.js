@@ -81,9 +81,19 @@ export default function createGameBoardController() {
       const hitShip = shipController.hit(
         gameBoardCopy.board[coordinates.outer][coordinates.inner],
       );
-
+      gameBoardCopy.board.forEach((inner) => {
+        inner.forEach((cell) => {
+          if (
+            typeof cell === "object" &&
+            cell !== null &&
+            cell.id === hitShip.id
+          )
+            cell.hitCount = hitShip.hitCount;
+        });
+      });
       gameBoardCopy.ships[hitShip.id] = hitShip;
       gameBoardCopy.board[coordinates.outer][coordinates.inner] = 1;
+
       return gameBoardCopy;
     }
     throw new Error("board has already received an attack at the coordinates");

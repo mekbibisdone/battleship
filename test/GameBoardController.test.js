@@ -296,6 +296,22 @@ describe("Receive Attack", () => {
       ).board,
     ).toEqual(testGameBoard.board);
   });
+  it("updates the hitCount of the whole ship when one part of it is hit", () => {
+    let testGameBoard = createGameBoardController().createGameBoard(1, 2);
+    const testShip = createShipController().createShip(2);
+    testGameBoard = createGameBoardController().placeShip(
+      { outer: 0, inner: 0 },
+      testShip,
+      testGameBoard,
+    );
+    expect(
+      createGameBoardController().receiveAttack(
+        { outer: 0, inner: 0 },
+        testGameBoard,
+        createShipController(),
+      ).board[0][1].hitCount,
+    ).toBe(1);
+  });
   it("throws an error if the place of the coordinates has already been recorded as a miss", () => {
     const gameBoardWithoutRecord = createGameBoardController().createGameBoard(
       10,
