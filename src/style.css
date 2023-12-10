@@ -1,0 +1,21 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root{
+  --cellHeight:0;
+}
+.boards {
+  display: grid;
+  padding: 10px;
+  grid-template-columns: repeat(2,1fr);
+  justify-items: center;
+}
+.boards > div {
+  display: grid;
+  width: 400px;
+  height: 400px;
+  border: 1px solid black;
+}
+
