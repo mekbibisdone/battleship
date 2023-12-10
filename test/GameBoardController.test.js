@@ -231,16 +231,16 @@ describe("Receive Attack", () => {
       "receive attack expects three arguments",
     );
   });
-  it("throws an error if x and y coordinates are below the range", () => {
+  it("throws an error if outer and inner coordinates are below the range", () => {
     const gameBoard = createGameBoardController().createGameBoard(10, 8);
-    const coordinates = { x: -1, y: -1 };
+    const coordinates = { outer: -1, inner: -1 };
     expect(() =>
       createGameBoardController().receiveAttack(coordinates, gameBoard, {}),
     ).toThrow("coordinates our of range");
   });
-  it("throws an error if x and y coordinates are above the range", () => {
+  it("throws an error if outer and inner coordinates are above the range", () => {
     const gameBoard = createGameBoardController().createGameBoard(10, 8);
-    const coordinates = { x: 10, y: 8 };
+    const coordinates = { outer: 10, inner: 8 };
     expect(() =>
       createGameBoardController().receiveAttack(coordinates, gameBoard, {}),
     ).toThrow("coordinates our of range");
@@ -252,7 +252,7 @@ describe("Receive Attack", () => {
       10,
       10,
     );
-    const coordinates = { x: 0, y: 0 };
+    const coordinates = { outer: 0, inner: 0 };
     const gameBoardWithMiss = createGameBoardController().receiveAttack(
       coordinates,
       gameBoardWithoutMiss,
@@ -265,7 +265,7 @@ describe("Receive Attack", () => {
       10,
       10,
     );
-    const coordinates = { x: 0, y: 0 };
+    const coordinates = { outer: 0, inner: 0 };
     const gameBoardWithMiss = createGameBoardController().receiveAttack(
       coordinates,
       gameBoardWithoutMiss,
@@ -281,7 +281,7 @@ describe("Receive Attack", () => {
       10,
       10,
     );
-    const hitCoordinates = { x: 0, y: 0 };
+    const hitCoordinates = { outer: 0, inner: 0 };
     const placeCoordinates = { outer: 0, inner: 0, vertical: false };
     const gameBoardWithShip = createGameBoardController().placeShip(
       placeCoordinates,
@@ -301,7 +301,7 @@ describe("Receive Attack", () => {
       10,
       10,
     );
-    const hitCoordinates = { x: 0, y: 0 };
+    const hitCoordinates = { outer: 0, inner: 0 };
     const gameBoardWithRecord = createGameBoardController().receiveAttack(
       hitCoordinates,
       gameBoardWithoutRecord,
@@ -327,7 +327,7 @@ describe("Receive Attack", () => {
       createShipController().createShip(1),
       gameBoardWithoutShip,
     );
-    const hitCoordinates = { x: 0, y: 0 };
+    const hitCoordinates = { outer: 0, inner: 0 };
     const gameBoardWithRecord = createGameBoardController().receiveAttack(
       hitCoordinates,
       gameBoardWithShip,
@@ -346,7 +346,7 @@ describe("Receive Attack", () => {
       10,
       10,
     );
-    const hitCoordinates = { x: 0, y: 0 };
+    const hitCoordinates = { outer: 0, inner: 0 };
     const gameBoardWithRecord = createGameBoardController().receiveAttack(
       hitCoordinates,
       gameBoardWithoutRecord,
@@ -369,7 +369,7 @@ describe("Receive Attack", () => {
       id: 0,
     };
     testGameBoard.ships.push(testShip);
-    const hitCoordinates = { x: 0, y: 0 };
+    const hitCoordinates = { outer: 0, inner: 0 };
     const placeCoordinates = { outer: 0, inner: 0, vertical: false };
     const gameBoardWithoutShip = createGameBoardController().createGameBoard(
       10,
@@ -428,7 +428,7 @@ describe("Receive Attack", () => {
       createShipController().createShip(1),
       gameBoardWithOneShip,
     );
-    const hitCoordinates = { x: 4, y: 4 };
+    const hitCoordinates = { outer: 4, inner: 4 };
     expect(
       createGameBoardController().receiveAttack(
         hitCoordinates,

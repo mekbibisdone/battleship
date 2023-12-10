@@ -1,11 +1,11 @@
 export default function createGameBoardController() {
-  function createGameBoard(x, y) {
-    if (x === undefined || y === undefined)
+  function createGameBoard(outer, inner) {
+    if (outer === undefined || inner === undefined)
       throw new Error("createGameBoard expects two arguments");
-    if (x < 1 || y < 1) throw new Error("parameters are below range");
-    const board = Array(x)
+    if (outer < 1 || inner < 1) throw new Error("parameters are below range");
+    const board = Array(outer)
       .fill(null)
-      .map(() => Array(y).fill(null));
+      .map(() => Array(inner).fill(null));
 
     const gameBoard = {
       board,
@@ -62,28 +62,28 @@ export default function createGameBoardController() {
     )
       throw new Error("receive attack expects three arguments");
     if (
-      coordinates.x < 0 ||
-      coordinates.y < 0 ||
-      coordinates.x >= gameBoard.board.length ||
-      coordinates.y >= gameBoard.board[0].length
+      coordinates.outer < 0 ||
+      coordinates.inner < 0 ||
+      coordinates.outer >= gameBoard.board.length ||
+      coordinates.inner >= gameBoard.board[0].length
     )
       throw new Error("coordinates our of range");
 
     const gameBoardCopy = JSON.parse(JSON.stringify(gameBoard));
-    if (gameBoardCopy.board[coordinates.x][coordinates.y] === null) {
+    if (gameBoardCopy.board[coordinates.outer][coordinates.inner] === null) {
       gameBoardCopy.board[0][0] = 0;
       return gameBoardCopy;
     } else if (
-      gameBoardCopy.board[coordinates.x][coordinates.y] !== null &&
-      gameBoardCopy.board[coordinates.x][coordinates.y] !== 0 &&
-      gameBoardCopy.board[coordinates.x][coordinates.y] !== 1
+      gameBoardCopy.board[coordinates.outer][coordinates.inner] !== null &&
+      gameBoardCopy.board[coordinates.outer][coordinates.inner] !== 0 &&
+      gameBoardCopy.board[coordinates.outer][coordinates.inner] !== 1
     ) {
       const hitShip = shipController.hit(
-        gameBoardCopy.board[coordinates.x][coordinates.y],
+        gameBoardCopy.board[coordinates.outer][coordinates.inner],
       );
 
       gameBoardCopy.ships[hitShip.id] = hitShip;
-      gameBoardCopy.board[coordinates.x][coordinates.y] = 1;
+      gameBoardCopy.board[coordinates.outer][coordinates.inner] = 1;
       return gameBoardCopy;
     }
     throw new Error("board has already received an attack at the coordinates");

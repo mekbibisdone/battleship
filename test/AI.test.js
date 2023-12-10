@@ -1,22 +1,22 @@
 import createAI from "../src/AI";
 import createGameBoardController from "../src/GameBoardController";
 import createShipController from "../src/ShipController";
-describe("Choose coordinates", () => {
+describe("Choose place coordinates", () => {
   it("throws an error if there are three arguments are not given", () => {
-    expect(() => createAI().chooseCoordinates()).toThrow(
-      "chooseCoordinates expects three arguments",
+    expect(() => createAI().choosePlaceCoordinates()).toThrow(
+      "choosePlaceCoordinates expects three arguments",
     );
   });
   it("throws an error if one of the arguments is missing", () => {
-    expect(() => createAI().chooseCoordinates()).toThrow(
-      "chooseCoordinates expects three arguments",
+    expect(() => createAI().choosePlaceCoordinates()).toThrow(
+      "choosePlaceCoordinates expects three arguments",
     );
   });
   it("chooses a valid coordinates when there is no cell occupied", () => {
     const gameBoardController = createGameBoardController();
     const gameBoardWithoutShip = gameBoardController.createGameBoard(1, 1);
     const ship = createShipController().createShip(1);
-    const { outer, inner } = createAI().chooseCoordinates(
+    const { outer, inner } = createAI().choosePlaceCoordinates(
       gameBoardWithoutShip,
       ship,
       gameBoardController,
@@ -32,7 +32,7 @@ describe("Choose coordinates", () => {
       ship,
       gameBoardWithoutShip,
     );
-    const { outer, inner } = createAI().chooseCoordinates(
+    const { outer, inner } = createAI().choosePlaceCoordinates(
       gameBoardWithShip,
       ship,
       gameBoardController,
@@ -52,7 +52,7 @@ describe("Choose coordinates", () => {
         gameBoardWithoutShip,
       ),
     );
-    const { outer, inner } = createAI().chooseCoordinates(
+    const { outer, inner } = createAI().choosePlaceCoordinates(
       gameBoardWithTwoShips,
       ship,
       gameBoardController,
@@ -75,7 +75,7 @@ describe("Choose coordinates", () => {
     gameBoardWithShips.board[1][0] = {};
     gameBoardWithShips.board[1][3] = {};
     const testShipTwo = createShipController().createShip(2);
-    const { outer, inner } = createAI().chooseCoordinates(
+    const { outer, inner } = createAI().choosePlaceCoordinates(
       gameBoardWithShips,
       testShipTwo,
       gameBoardController,
@@ -98,7 +98,7 @@ describe("Choose coordinates", () => {
     gameBoardWithShips.board[0][1] = {};
     gameBoardWithShips.board[3][1] = {};
     const testShipTwo = createShipController().createShip(2);
-    const chosenCoordinates = createAI().chooseCoordinates(
+    const chosenCoordinates = createAI().choosePlaceCoordinates(
       gameBoardWithShips,
       testShipTwo,
       gameBoardController,
@@ -109,21 +109,23 @@ describe("Choose coordinates", () => {
 
 describe("Choose hit coordinates", () => {
   it("throws an error if one argument is not given", () => {
-    expect(() => createAI().getHitCoordinates()).toThrow(
-      "getHitCoordinates expects one argument",
+    expect(() => createAI().chooseHitCoordinates()).toThrow(
+      "chooseHitCoordinates expects one argument",
     );
   });
   it("returns a valid hit coordinates when the board only has one cell and it's empty", () => {
     const gameBoardController = createGameBoardController();
     expect(
-      createAI().getHitCoordinates(gameBoardController.createGameBoard(1, 1)),
+      createAI().chooseHitCoordinates(
+        gameBoardController.createGameBoard(1, 1),
+      ),
     ).toEqual({ outer: 0, inner: 0 });
   });
   it("returns a valid hit coordinates when the board has two cells and one is empty and the other is occupied", () => {
     const gameBoardController = createGameBoardController();
     const testGameBoard = gameBoardController.createGameBoard(1, 2);
     testGameBoard.board[0][0] = 1;
-    expect(createAI().getHitCoordinates(testGameBoard)).toEqual({
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toEqual({
       outer: 0,
       inner: 1,
     });
@@ -137,7 +139,7 @@ describe("Choose hit coordinates", () => {
     testGameBoard.board[1][0] = 1;
     testGameBoard.board[1][2] = 1;
 
-    expect(createAI().getHitCoordinates(testGameBoard)).toEqual({
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toEqual({
       outer: 1,
       inner: 1,
     });
@@ -151,7 +153,7 @@ describe("Choose hit coordinates", () => {
     testGameBoard.board[1][0] = 0;
     testGameBoard.board[1][1] = { length: 1 };
     testGameBoard.board[1][2] = 0;
-    expect(createAI().getHitCoordinates(testGameBoard)).toEqual({
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toEqual({
       outer: 1,
       inner: 1,
     });

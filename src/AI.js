@@ -1,14 +1,14 @@
 export default function createAI() {
-  return { chooseCoordinates, getHitCoordinates };
+  return { choosePlaceCoordinates, chooseHitCoordinates };
 }
 
-function chooseCoordinates(gameBoard, ship, gameBoardController) {
+function choosePlaceCoordinates(gameBoard, ship, gameBoardController) {
   if (
     gameBoard === undefined ||
     ship === undefined ||
     gameBoardController === undefined
   )
-    throw new Error("chooseCoordinates expects three arguments");
+    throw new Error("choosePlaceCoordinates expects three arguments");
   let outer;
   let inner;
   let vertical = false;
@@ -51,9 +51,9 @@ function chooseCoordinates(gameBoard, ship, gameBoardController) {
   return chosenCoordinates;
 }
 
-function getHitCoordinates(gameBoard) {
+function chooseHitCoordinates(gameBoard) {
   if (gameBoard === undefined)
-    throw new Error("getHitCoordinates expects one arguments");
+    throw new Error("chooseHitCoordinates expects one arguments");
   let outer;
   let inner;
   let chosenCoordinates = { outer, inner };
