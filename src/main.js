@@ -43,7 +43,11 @@ function attackAIShips(e) {
     console.table(AIGameBoard.board);
     console.table(GameController.getPlayerGameBoard().board);
     e.target.setAttribute("isHit", true);
-    attackPlayerShips();
+    if (GameController.isGameOver()) {
+      handleWinStatus(true);
+    } else {
+      attackPlayerShips();
+    }
   }
 }
 
@@ -56,4 +60,21 @@ function attackPlayerShips() {
     GameController.getPlayerGameBoard().board[coordinates.outer][
       coordinates.inner
     ];
+  if (GameController.isGameOver()) {
+    handleWinStatus(false);
+  }
+}
+
+function handleWinStatus(win) {
+  if (win === true) {
+    const winnerElement = document.querySelector(".winner");
+    winnerElement.textContent = "Congrats! you have won";
+  } else {
+    const winnerElement = document.querySelector(".winner");
+    winnerElement.textContent = "Sorry, but you have lost";
+  }
+  const AIBoardCells = document.querySelectorAll(`[owner="AI"]`);
+  AIBoardCells.forEach((AIBoardCell) => {
+    AIBoardCell.removeEventListener("click", attackAIShips);
+  });
 }

@@ -29,6 +29,17 @@ export default (function GameController() {
         playerGameBoard,
       );
     }
+    // for (let i = 0; i < playerGameBoard.board.length; i++) {
+    //   for (let j = 0; j < playerGameBoard.board[0].length; j++) {
+    //     playerGameBoard.board[i][j] = 1;
+    //   }
+    // }
+    // playerGameBoard.board[0][0] = null;
+    // playerGameBoard = gameBoardController.placeShip(
+    //   { outer: 0, inner: 0 },
+    //   shipController.createShip(1),
+    //   playerGameBoard,
+    // );
     return playerGameBoard;
   }
   function placeAIShips() {
@@ -58,10 +69,22 @@ export default (function GameController() {
     );
     return coordinates;
   }
+  function isGameOver() {
+    if (
+      gameBoardController.haveAllShipSunk(
+        playerGameBoard.ships,
+        shipController,
+      ) ||
+      gameBoardController.haveAllShipSunk(AIGameBoard.ships, shipController)
+    )
+      return true;
+    return false;
+  }
   return {
     getAIGameBoard,
     getPlayerGameBoard,
     attackAIShips,
     attackPlayerShips,
+    isGameOver,
   };
 })();
