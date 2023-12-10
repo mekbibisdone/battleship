@@ -1,5 +1,5 @@
 export default function createAI() {
-  return { chooseCoordinates };
+  return { chooseCoordinates, getHitCoordinates };
 }
 
 function chooseCoordinates(gameBoard, ship, gameBoardController) {
@@ -46,6 +46,39 @@ function chooseCoordinates(gameBoard, ship, gameBoardController) {
       } else {
         throw e;
       }
+    }
+  }
+  return chosenCoordinates;
+}
+
+function getHitCoordinates(gameBoard) {
+  if (gameBoard === undefined)
+    throw new Error("getHitCoordinates expects one arguments");
+  let outer;
+  let inner;
+  let chosenCoordinates = { outer, inner };
+  const tried = [];
+  while (true) {
+    outer = Math.floor(Math.random() * gameBoard.board.length);
+    inner = Math.floor(Math.random() * gameBoard.board[0].length);
+    chosenCoordinates = { outer, inner };
+    let checkedAlready = false;
+    for (let triedCoordinates of tried) {
+      if (
+        chosenCoordinates.outer === triedCoordinates.outer &&
+        chosenCoordinates.inner === triedCoordinates.inner
+      ) {
+        checkedAlready = true;
+        break;
+      }
+    }
+    if (!checkedAlready) {
+      if (
+        gameBoard.board[chosenCoordinates.outer][chosenCoordinates.inner] !==
+          0 &&
+        gameBoard.board[chosenCoordinates.outer][chosenCoordinates.inner] !== 1
+      )
+        break;
     }
   }
   return chosenCoordinates;

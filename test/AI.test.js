@@ -106,3 +106,54 @@ describe("Choose coordinates", () => {
     expect(chosenCoordinates).toEqual({ outer: 1, inner: 1, vertical: true });
   });
 });
+
+describe("Choose hit coordinates", () => {
+  it("throws an error if one argument is not given", () => {
+    expect(() => createAI().getHitCoordinates()).toThrow(
+      "getHitCoordinates expects one argument",
+    );
+  });
+  it("returns a valid hit coordinates when the board only has one cell and it's empty", () => {
+    const gameBoardController = createGameBoardController();
+    expect(
+      createAI().getHitCoordinates(gameBoardController.createGameBoard(1, 1)),
+    ).toEqual({ outer: 0, inner: 0 });
+  });
+  it("returns a valid hit coordinates when the board has two cells and one is empty and the other is occupied", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(1, 2);
+    testGameBoard.board[0][0] = 1;
+    expect(createAI().getHitCoordinates(testGameBoard)).toEqual({
+      outer: 0,
+      inner: 1,
+    });
+  });
+  it("returns a valid hit coordinates when the board has more than two cells and but only one of the cells is empty", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(2, 3);
+    testGameBoard.board[0][0] = 1;
+    testGameBoard.board[0][1] = 1;
+    testGameBoard.board[0][2] = 1;
+    testGameBoard.board[1][0] = 1;
+    testGameBoard.board[1][2] = 1;
+
+    expect(createAI().getHitCoordinates(testGameBoard)).toEqual({
+      outer: 1,
+      inner: 1,
+    });
+  });
+  it("returns a valid hit coordinates when the board has more than two cells and and only one of them has a ship", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(2, 3);
+    testGameBoard.board[0][0] = 0;
+    testGameBoard.board[0][1] = 0;
+    testGameBoard.board[0][2] = 0;
+    testGameBoard.board[1][0] = 0;
+    testGameBoard.board[1][1] = { length: 1 };
+    testGameBoard.board[1][2] = 0;
+    expect(createAI().getHitCoordinates(testGameBoard)).toEqual({
+      outer: 1,
+      inner: 1,
+    });
+  });
+});
