@@ -69,6 +69,12 @@ export default (function GameController() {
       return true;
     return false;
   }
+  function getCurrentShipSize() {
+    return ships[playerGameBoard.ships.length].length;
+  }
+  function haveAllShipsBeenPlaced() {
+    return playerGameBoard.ships.length === ships.length;
+  }
   function resetGame() {
     AIGameBoard = placeAIShips();
     playerGameBoard = gameBoardController.createGameBoard(10, 10);
@@ -82,5 +88,7 @@ export default (function GameController() {
     attackPlayerShips,
     isGameOver,
     resetGame,
+    getCurrentShipSize,
+    haveAllShipsBeenPlaced,
   };
 })();

@@ -101,15 +101,9 @@ function placeShip(e) {
   const vertical = axis === "vertical" ? true : false;
   const coordinates = { outer, inner, vertical };
   try {
-    const lengthBeforeMutation =
-      GameController.getShips()[
-        GameController.getPlayerGameBoard().ships.length
-      ].length;
+    const sizeBeforeMutation = GameController.getCurrentShipSize();
     GameController.placePlayerShips(coordinates);
-    if (
-      GameController.getPlayerGameBoard().ships.length ===
-      GameController.getShips().length
-    ) {
+    if (GameController.haveAllShipsBeenPlaced()) {
       const playerCells = document.querySelectorAll(`[owner="player"]`);
       playerCells.forEach((cell) => {
         cell.removeEventListener("mouseover", highLightShip);
@@ -120,7 +114,7 @@ function placeShip(e) {
         cell.addEventListener("click", attackAIShips);
       });
     }
-    colorCells(coordinates, lengthBeforeMutation);
+    colorCells(coordinates, sizeBeforeMutation);
   } catch (e) {
     console.log(e.message);
   }
@@ -139,16 +133,10 @@ function handleWinStatus(win) {
   });
 }
 
-function resetGame() {
-  const boards = document.querySelector(".boards");
-  boards.textContent = "";
-  GameController.resetGame();
-  createGameBoard();
-}
-function colorCells(coordinates, length) {
+function colorCells(coordinates, size) {
   removeHighLight();
   if (coordinates.vertical === true) {
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < size; i++) {
       const cell = document.querySelector(
         `[outer="${coordinates.outer + i}"][inner="${
           coordinates.inner
@@ -160,7 +148,7 @@ function colorCells(coordinates, length) {
       cell.removeEventListener("click", placeShip);
     }
   } else {
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < size; i++) {
       const cell = document.querySelector(
         `[outer="${coordinates.outer}"][inner="${
           coordinates.inner + i
@@ -178,15 +166,14 @@ function highLightShip(e) {
   const outer = Number(e.target.getAttribute("outer"));
   const inner = Number(e.target.getAttribute("inner"));
   const playerGameBoard = GameController.getPlayerGameBoard();
-  const ships = GameController.getShips();
-  const length = ships[playerGameBoard.ships.length].length;
+  const size = GameController.getCurrentShipSize();
   const axis = document.querySelector(`[axis]`).getAttribute("axis");
   if (axis === "horizontal") {
     if (
       playerGameBoard.board[outer] !== undefined &&
-      playerGameBoard.board[outer][inner + length - 1] !== undefined
+      playerGameBoard.board[outer][inner + size - 1] !== undefined
     ) {
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < size; i++) {
         const cell = document.querySelector(
           `[outer="${outer}"][inner="${inner + i}"][owner="player"]`,
         );
@@ -197,8 +184,8 @@ function highLightShip(e) {
       }
     }
   } else {
-    if (playerGameBoard.board[outer + length - 1] !== undefined) {
-      for (let i = 0; i < length; i++) {
+    if (playerGameBoard.board[outer + size - 1] !== undefined) {
+      for (let i = 0; i < size; i++) {
         const cell = document.querySelector(
           `[outer="${outer + i}"][inner="${inner}"][owner="player"]`,
         );
@@ -227,4 +214,11 @@ function changeAxis(e) {
     e.target.textContent = "Toggle Horizontal";
     e.target.setAttribute("axis", "vertical");
   }
+}
+
+function resetGame() {
+  const boards = document.querySelector(".boards");
+  boards.textContent = "";
+  GameController.resetGame();
+  createGameBoard();
 }
