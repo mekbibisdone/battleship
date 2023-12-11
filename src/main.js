@@ -53,7 +53,6 @@ function createCells(board, boardOwner) {
       cell.setAttribute("inner", j);
       if (boardOwner === "AI") {
         cell.setAttribute("isHit", false);
-        cell.addEventListener("click", attackAIShips);
       } else {
         cell.addEventListener("mouseover", highLightShip);
         cell.addEventListener("click", placeShip);
@@ -111,10 +110,14 @@ function placeShip(e) {
       GameController.getPlayerGameBoard().ships.length ===
       GameController.getShips().length
     ) {
-      const cells = document.querySelectorAll(`[owner="player"]`);
-      cells.forEach((cell) => {
+      const playerCells = document.querySelectorAll(`[owner="player"]`);
+      playerCells.forEach((cell) => {
         cell.removeEventListener("mouseover", highLightShip);
         cell.removeEventListener("click", placeShip);
+      });
+      const AICells = document.querySelectorAll(`[owner="AI"]`);
+      AICells.forEach((cell) => {
+        cell.addEventListener("click", attackAIShips);
       });
     }
     colorCells(coordinates, lengthBeforeMutation);
