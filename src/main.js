@@ -40,14 +40,14 @@ function displayGameStatus(errorMessage = null, winner = null) {
 }
 function createButtonDiv() {
   const buttonDiv = document.createElement("div");
-
+  buttonDiv.classList.toggle("buttonContainer");
   const resetButton = document.createElement("button");
   resetButton.textContent = "Reset";
   resetButton.classList.toggle("reset");
   resetButton.addEventListener("click", resetGame);
 
   const toggleAxis = document.createElement("button");
-  toggleAxis.textContent = "Toggle Horizontal";
+  toggleAxis.textContent = "Toggle Horizontal Placement";
   toggleAxis.addEventListener("click", changeAxis);
   toggleAxis.setAttribute("axis", "vertical");
 
@@ -215,17 +215,17 @@ function highLightShip(e) {
 function removeHighLight() {
   const highLightedCells = document.querySelectorAll(`[onHold="true"]`);
   highLightedCells.forEach((highLightedCell) => {
-    highLightedCell.style.setProperty("background-color", "white");
+    highLightedCell.style.setProperty("background-color", "rgb(235, 235, 235)");
     highLightedCell.setAttribute("onHold", false);
   });
 }
 
 function changeAxis(e) {
   if (e.target.getAttribute("axis") === "vertical") {
-    e.target.textContent = "Toggle Vertical";
+    e.target.textContent = "Toggle Vertical Placement";
     e.target.setAttribute("axis", "horizontal");
   } else {
-    e.target.textContent = "Toggle Horizontal";
+    e.target.textContent = "Toggle Horizontal Placement";
     e.target.setAttribute("axis", "vertical");
   }
 }

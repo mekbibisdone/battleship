@@ -9,7 +9,12 @@
 header {
   text-align: center;
 }
+header h1 {
+  padding: 25px;
+  box-shadow: 0px 1px 4px gray;
+}
 .gameStatus {
+  padding: 10px;
   height: 100px;
   font-size: 2rem;
 }
@@ -21,6 +26,7 @@ header {
 }
 .boardLeft, .boardRight {
   display: grid;
+  background: rgb(235, 235, 235);
   width: 400px;
   height: 400px;
   border: 1px solid black;
@@ -30,9 +36,17 @@ header {
   display: grid;
   align-items: center;
 }
+.buttonContainer{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content:center;
+  gap: 50px;
+}
 
-.reset {
-  align-self: center;
+.buttonContainer button{
   padding: 10px;
   border-radius: 4px;
+  font-size: 1rem;
 }
+
