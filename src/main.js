@@ -90,7 +90,10 @@ function attackAIShips(e) {
     const inner = Number(e.target.getAttribute("inner"));
     GameController.attackAIShips({ outer, inner });
     let AIGameBoard = GameController.getAIGameBoard();
-    e.target.textContent = AIGameBoard.board[outer][inner];
+    if (AIGameBoard.board[outer][inner] === 1)
+      e.target.style.background = `red`;
+    else e.target.style.background = `blue`;
+
     e.target.setAttribute("isHit", true);
     if (GameController.isGameOver()) {
       displayGameStatus(null, true);
@@ -105,10 +108,14 @@ function attackPlayerShips() {
   const hitCell = document.querySelector(
     `[outer="${coordinates.outer}"][inner="${coordinates.inner}"][owner="player"]`,
   );
-  hitCell.textContent =
+  if (
     GameController.getPlayerGameBoard().board[coordinates.outer][
       coordinates.inner
-    ];
+    ] === 1
+  )
+    hitCell.style.background = `red`;
+  else hitCell.style.background = `blue`;
+
   if (GameController.isGameOver()) {
     displayGameStatus(null, false);
   }
@@ -185,7 +192,7 @@ function highLightShip(e) {
           `[outer="${outer}"][inner="${inner + i}"][owner="player"]`,
         );
         if (cell.getAttribute("placed") !== "true") {
-          cell.style.setProperty("background-color", "blue");
+          cell.style.setProperty("background-color", "yellow");
           cell.setAttribute("onHold", true);
         }
       }
@@ -197,7 +204,7 @@ function highLightShip(e) {
           `[outer="${outer + i}"][inner="${inner}"][owner="player"]`,
         );
         if (cell.getAttribute("placed") !== "true") {
-          cell.style.setProperty("background-color", "blue");
+          cell.style.setProperty("background-color", "yellow");
           cell.setAttribute("onHold", true);
         }
       }
