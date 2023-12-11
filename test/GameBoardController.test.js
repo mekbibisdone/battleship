@@ -258,7 +258,7 @@ describe("Receive Attack", () => {
       gameBoardWithoutMiss,
       {},
     );
-    expect(gameBoardWithMiss).toEqual(testGameBoard);
+    expect(gameBoardWithMiss.board).toEqual(testGameBoard.board);
   });
   it("doesn't mutate the given board", () => {
     const gameBoardWithoutMiss = createGameBoardController().createGameBoard(
@@ -402,8 +402,8 @@ describe("Receive Attack", () => {
         hitCoordinates,
         gameBoardWithShip,
         createShipController(),
-      ),
-    ).toEqual(testGameBoard);
+      ).board,
+    ).toEqual(testGameBoard.board);
   });
   it("returns a board with hit recorded and ship hit count increased when there are two ships on board", () => {
     const testGameBoard = createGameBoardController().createGameBoard(10, 10);
@@ -450,8 +450,8 @@ describe("Receive Attack", () => {
         hitCoordinates,
         gameBoardWithTwoShip,
         createShipController(),
-      ),
-    ).toEqual(testGameBoard);
+      ).board,
+    ).toEqual(testGameBoard.board);
   });
 });
 

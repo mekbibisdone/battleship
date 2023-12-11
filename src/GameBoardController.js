@@ -72,6 +72,10 @@ export default function createGameBoardController() {
     const gameBoardCopy = JSON.parse(JSON.stringify(gameBoard));
     if (gameBoardCopy.board[coordinates.outer][coordinates.inner] === null) {
       gameBoardCopy.board[coordinates.outer][coordinates.inner] = 0;
+      gameBoardCopy.previousAttack = {
+        coordinates,
+        hit: false,
+      };
       return gameBoardCopy;
     } else if (
       gameBoardCopy.board[coordinates.outer][coordinates.inner] !== null &&
@@ -93,7 +97,10 @@ export default function createGameBoardController() {
       });
       gameBoardCopy.ships[hitShip.id] = hitShip;
       gameBoardCopy.board[coordinates.outer][coordinates.inner] = 1;
-
+      gameBoardCopy.previousAttack = {
+        coordinates,
+        hit: true,
+      };
       return gameBoardCopy;
     }
     throw new Error("board has already received an attack at the coordinates");

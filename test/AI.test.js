@@ -158,4 +158,112 @@ describe("Choose hit coordinates", () => {
       inner: 1,
     });
   });
+  it("hits an adjacent cell when it gets a hit", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(3, 3);
+    testGameBoard.board[1][1] = 1;
+    testGameBoard.previousAttack = {
+      coordinates: { outer: 1, inner: 1 },
+      hit: true,
+    };
+    const possibleCoordinates = [
+      { outer: 0, inner: 1 },
+      { outer: 2, inner: 1 },
+      { outer: 1, inner: 0 },
+      { outer: 1, inner: 2 },
+    ];
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toBeOneOf(
+      possibleCoordinates,
+    );
+  });
+  it("hits an adjacent cell when it gets a hit and the hit cell is on the right edge", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(3, 3);
+    testGameBoard.board[1][2] = 1;
+    testGameBoard.previousAttack = {
+      coordinates: { outer: 1, inner: 1 },
+      hit: true,
+    };
+    const possibleCoordinates = [
+      { outer: 0, inner: 1 },
+      { outer: 2, inner: 1 },
+      { outer: 1, inner: 0 },
+    ];
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toBeOneOf(
+      possibleCoordinates,
+    );
+  });
+  it("hits an adjacent cell when it gets a hit and the hit cell is on the right edge", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(3, 3);
+    testGameBoard.board[1][0] = 1;
+    testGameBoard.previousAttack = {
+      coordinates: { outer: 1, inner: 1 },
+      hit: true,
+    };
+    const possibleCoordinates = [
+      { outer: 0, inner: 1 },
+      { outer: 2, inner: 1 },
+      { outer: 1, inner: 2 },
+    ];
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toBeOneOf(
+      possibleCoordinates,
+    );
+  });
+  it("hits an adjacent cell when it gets a hit and the hit cell is on the upper edge", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(3, 3);
+    testGameBoard.board[0][1] = 1;
+    testGameBoard.previousAttack = {
+      coordinates: { outer: 1, inner: 1 },
+      hit: true,
+    };
+    const possibleCoordinates = [
+      { outer: 2, inner: 1 },
+      { outer: 1, inner: 0 },
+      { outer: 1, inner: 2 },
+    ];
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toBeOneOf(
+      possibleCoordinates,
+    );
+  });
+  it("hits an adjacent cell when it gets a hit and the hit cell is on the bottom edge", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(3, 3);
+    testGameBoard.board[2][1] = 1;
+    testGameBoard.previousAttack = {
+      coordinates: { outer: 1, inner: 1 },
+      hit: true,
+    };
+    const possibleCoordinates = [
+      { outer: 0, inner: 1 },
+      { outer: 1, inner: 0 },
+      { outer: 1, inner: 2 },
+    ];
+    expect(createAI().chooseHitCoordinates(testGameBoard)).toBeOneOf(
+      possibleCoordinates,
+    );
+  });
+  it("returns a random valid coordinate when all adjacent cells have already received a hit", () => {
+    const gameBoardController = createGameBoardController();
+    const testGameBoard = gameBoardController.createGameBoard(3, 3);
+    testGameBoard.board[1][1] = 1;
+    testGameBoard.previousAttack = {
+      coordinates: { outer: 1, inner: 1 },
+      hit: true,
+    };
+    const possibleCoordinates = [
+      { outer: 0, inner: 1 },
+      { outer: 2, inner: 1 },
+      { outer: 1, inner: 0 },
+      { outer: 1, inner: 2 },
+    ];
+    for (let possibleCoordinate of possibleCoordinates) {
+      testGameBoard.board[possibleCoordinate.outer][possibleCoordinate.inner] =
+        1;
+    }
+    expect(createAI().chooseHitCoordinates(testGameBoard)).not.toBeOneOf(
+      possibleCoordinates,
+    );
+  });
 });

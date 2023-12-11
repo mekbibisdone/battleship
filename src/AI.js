@@ -58,6 +58,42 @@ function chooseHitCoordinates(gameBoard) {
   let inner;
   let chosenCoordinates = { outer, inner };
   const tried = [];
+  if (
+    gameBoard.previousAttack !== undefined &&
+    gameBoard.previousAttack.hit === true
+  ) {
+    const offset = [1, -1];
+    let possibleCoordinates = [];
+    for (let i = 0; i < 2; i++) {
+      possibleCoordinates.push({
+        outer: gameBoard.previousAttack.coordinates.outer,
+        inner: gameBoard.previousAttack.coordinates.inner + offset[i],
+      });
+      possibleCoordinates.push({
+        outer: gameBoard.previousAttack.coordinates.outer + offset[i],
+        inner: gameBoard.previousAttack.coordinates.inner,
+      });
+    }
+    while (possibleCoordinates.length !== 0) {
+      chosenCoordinates =
+        possibleCoordinates[
+          Math.floor(Math.random() * possibleCoordinates.length)
+        ];
+      if (
+        chosenCoordinates.outer < gameBoard.board.length &&
+        chosenCoordinates.inner < gameBoard.board[0].length &&
+        gameBoard.board[chosenCoordinates.outer][chosenCoordinates.inner] !==
+          0 &&
+        gameBoard.board[chosenCoordinates.outer][chosenCoordinates.inner] !== 1
+      )
+        return chosenCoordinates;
+      possibleCoordinates = possibleCoordinates.filter(
+        (possibleCoordinate) =>
+          possibleCoordinate.outer !== chosenCoordinates.outer ||
+          possibleCoordinate.inner !== chosenCoordinates.inner,
+      );
+    }
+  }
   while (true) {
     outer = Math.floor(Math.random() * gameBoard.board.length);
     inner = Math.floor(Math.random() * gameBoard.board[0].length);
