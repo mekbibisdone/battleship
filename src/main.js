@@ -24,6 +24,7 @@ function displayGameStatus(errorMessage = null, winner = null) {
       instruction.textContent = "Congrats! you have won";
     } else {
       instruction.textContent = "Sorry, but you have lost";
+      displayAIShips();
     }
     const AIBoardCells = document.querySelectorAll(`[owner="AI"]`);
     AIBoardCells.forEach((AIBoardCell) => {
@@ -229,7 +230,21 @@ function changeAxis(e) {
     e.target.setAttribute("axis", "vertical");
   }
 }
-
+function displayAIShips() {
+  const AICells = document.querySelectorAll(`[isHit="false"][owner="AI"]`);
+  const AIGameBoard = GameController.getAIGameBoard();
+  AICells.forEach((AICell) => {
+    const outer = Number(AICell.getAttribute("outer"));
+    const inner = Number(AICell.getAttribute("inner"));
+    if (
+      AIGameBoard.board[outer][inner] !== 1 &&
+      AIGameBoard.board[outer][inner] !== 0 &&
+      AIGameBoard.board[outer][inner] !== null
+    ) {
+      AICell.style.setProperty("background-color", "green");
+    }
+  });
+}
 function resetGame() {
   const boards = document.querySelector(".boards");
   boards.textContent = "";
