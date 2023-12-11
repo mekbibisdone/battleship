@@ -6,6 +6,13 @@
 :root{
   --cellHeight:0;
 }
+header {
+  text-align: center;
+}
+.gameStatus {
+  height: 100px;
+  font-size: 2rem;
+}
 .boards {
   display: grid;
   padding: 10px;

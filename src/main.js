@@ -1,21 +1,43 @@
 import "./style.css";
 import GameController from "./GameController";
 createGameBoard();
-
+displayGameStatus();
 function createGameBoard() {
   const boards = document.querySelector(".boards");
   const playerBoard = document.createElement("div");
   playerBoard.classList.toggle("boardLeft");
   const AIBoard = document.createElement("div");
   AIBoard.classList.toggle("boardRight");
-
-  const winnerStatus = document.createElement("h1");
-  winnerStatus.classList.toggle("winner");
-  boards.append(playerBoard, createButtonDiv(), AIBoard, winnerStatus);
+  boards.append(playerBoard, createButtonDiv(), AIBoard);
   createCells(playerBoard, "player");
   createCells(AIBoard, "AI");
 }
-
+function displayGameStatus(errorMessage = null, winner = null) {
+  const instruction = document.querySelector(".gameStatus");
+  if (errorMessage !== null) {
+    instruction.textContent = errorMessage;
+    setTimeout(displayGameStatus, 2000);
+    return;
+  }
+  if (winner !== null) {
+    if (winner === true) {
+      instruction.textContent = "Congrats! you have won";
+    } else {
+      instruction.textContent = "Sorry, but you have lost";
+    }
+    const AIBoardCells = document.querySelectorAll(`[owner="AI"]`);
+    AIBoardCells.forEach((AIBoardCell) => {
+      AIBoardCell.removeEventListener("click", attackAIShips);
+    });
+    return;
+  }
+  if (GameController.haveAllShipsBeenPlaced()) {
+    instruction.textContent = "Click on the right board's cell to attack";
+  } else {
+    const size = GameController.getCurrentShipSize();
+    instruction.textContent = `Hover and click on the left board to place a ship of size ${size}`;
+  }
+}
 function createButtonDiv() {
   const buttonDiv = document.createElement("div");
 
@@ -69,11 +91,9 @@ function attackAIShips(e) {
     GameController.attackAIShips({ outer, inner });
     let AIGameBoard = GameController.getAIGameBoard();
     e.target.textContent = AIGameBoard.board[outer][inner];
-    console.table(AIGameBoard.board);
-    console.table(GameController.getPlayerGameBoard().board);
     e.target.setAttribute("isHit", true);
     if (GameController.isGameOver()) {
-      handleWinStatus(true);
+      displayGameStatus(null, true);
     } else {
       attackPlayerShips();
     }
@@ -90,7 +110,7 @@ function attackPlayerShips() {
       coordinates.inner
     ];
   if (GameController.isGameOver()) {
-    handleWinStatus(false);
+    displayGameStatus(null, false);
   }
 }
 function placeShip(e) {
@@ -114,25 +134,12 @@ function placeShip(e) {
         cell.addEventListener("click", attackAIShips);
       });
     }
+    displayGameStatus();
     colorCells(coordinates, sizeBeforeMutation);
   } catch (e) {
-    console.log(e.message);
+    displayGameStatus(e.message);
   }
 }
-function handleWinStatus(win) {
-  if (win === true) {
-    const winnerElement = document.querySelector(".winner");
-    winnerElement.textContent = "Congrats! you have won";
-  } else {
-    const winnerElement = document.querySelector(".winner");
-    winnerElement.textContent = "Sorry, but you have lost";
-  }
-  const AIBoardCells = document.querySelectorAll(`[owner="AI"]`);
-  AIBoardCells.forEach((AIBoardCell) => {
-    AIBoardCell.removeEventListener("click", attackAIShips);
-  });
-}
-
 function colorCells(coordinates, size) {
   removeHighLight();
   if (coordinates.vertical === true) {
@@ -221,4 +228,5 @@ function resetGame() {
   boards.textContent = "";
   GameController.resetGame();
   createGameBoard();
+  displayGameStatus();
 }
