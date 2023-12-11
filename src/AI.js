@@ -80,6 +80,8 @@ function chooseHitCoordinates(gameBoard) {
           Math.floor(Math.random() * possibleCoordinates.length)
         ];
       if (
+        chosenCoordinates.outer >= 0 &&
+        chosenCoordinates.inner >= 0 &&
         chosenCoordinates.outer < gameBoard.board.length &&
         chosenCoordinates.inner < gameBoard.board[0].length &&
         gameBoard.board[chosenCoordinates.outer][chosenCoordinates.inner] !==
