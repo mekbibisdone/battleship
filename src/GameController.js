@@ -9,37 +9,26 @@ export default (function GameController() {
     shipController.createShip(5),
     shipController.createShip(4),
     shipController.createShip(3),
-    shipController.createShip(3),
     shipController.createShip(2),
+    shipController.createShip(1),
   ];
+  function getShips() {
+    return ships;
+  }
   let AIGameBoard = placeAIShips();
   let playerGameBoard = gameBoardController.createGameBoard(10, 10);
-  playerGameBoard = placePlayerShips();
   function getAIGameBoard() {
     return AIGameBoard;
   }
   function getPlayerGameBoard() {
     return playerGameBoard;
   }
-  function placePlayerShips() {
-    for (let i = 0; i < ships.length; i++) {
-      playerGameBoard = gameBoardController.placeShip(
-        { outer: 0 + i, inner: 0 },
-        ships[i],
-        playerGameBoard,
-      );
-    }
-    // for (let i = 0; i < playerGameBoard.board.length; i++) {
-    //   for (let j = 0; j < playerGameBoard.board[0].length; j++) {
-    //     playerGameBoard.board[i][j] = 1;
-    //   }
-    // }
-    // playerGameBoard.board[0][0] = null;
-    // playerGameBoard = gameBoardController.placeShip(
-    //   { outer: 0, inner: 0 },
-    //   shipController.createShip(1),
-    //   playerGameBoard,
-    // );
+  function placePlayerShips(coordinates) {
+    playerGameBoard = gameBoardController.placeShip(
+      coordinates,
+      ships[playerGameBoard.ships.length],
+      playerGameBoard,
+    );
     return playerGameBoard;
   }
   function placeAIShips() {
@@ -83,11 +72,12 @@ export default (function GameController() {
   function resetGame() {
     AIGameBoard = placeAIShips();
     playerGameBoard = gameBoardController.createGameBoard(10, 10);
-    playerGameBoard = placePlayerShips();
   }
   return {
+    getShips,
     getAIGameBoard,
     getPlayerGameBoard,
+    placePlayerShips,
     attackAIShips,
     attackPlayerShips,
     isGameOver,

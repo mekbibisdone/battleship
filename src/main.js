@@ -8,17 +8,30 @@ function createGameBoard() {
   playerBoard.classList.toggle("boardLeft");
   const AIBoard = document.createElement("div");
   AIBoard.classList.toggle("boardRight");
-  const resetButton = document.createElement("button");
-  resetButton.textContent = "Reset";
-  resetButton.classList.toggle("reset");
-  resetButton.addEventListener("click", resetGame);
+
   const winnerStatus = document.createElement("h1");
   winnerStatus.classList.toggle("winner");
-  boards.append(playerBoard, resetButton, AIBoard, winnerStatus);
+  boards.append(playerBoard, createButtonDiv(), AIBoard, winnerStatus);
   createCells(playerBoard, "player");
   createCells(AIBoard, "AI");
 }
 
+function createButtonDiv() {
+  const buttonDiv = document.createElement("div");
+
+  const resetButton = document.createElement("button");
+  resetButton.textContent = "Reset";
+  resetButton.classList.toggle("reset");
+  resetButton.addEventListener("click", resetGame);
+
+  const toggleAxis = document.createElement("button");
+  toggleAxis.textContent = "Toggle Horizontal";
+  toggleAxis.addEventListener("click", changeAxis);
+  toggleAxis.setAttribute("axis", "vertical");
+
+  buttonDiv.append(toggleAxis, resetButton);
+  return buttonDiv;
+}
 function createCells(board, boardOwner) {
   const width = board.offsetWidth;
   const height = board.offsetHeight;
@@ -41,6 +54,9 @@ function createCells(board, boardOwner) {
       if (boardOwner === "AI") {
         cell.setAttribute("isHit", false);
         cell.addEventListener("click", attackAIShips);
+      } else {
+        cell.addEventListener("mouseover", highLightShip);
+        cell.addEventListener("click", placeShip);
       }
       board.append(cell);
     }
@@ -78,7 +94,34 @@ function attackPlayerShips() {
     handleWinStatus(false);
   }
 }
-
+function placeShip(e) {
+  removeHighLight();
+  const outer = Number(e.target.getAttribute("outer"));
+  const inner = Number(e.target.getAttribute("inner"));
+  const axis = document.querySelector(`[axis]`).getAttribute("axis");
+  const vertical = axis === "vertical" ? true : false;
+  const coordinates = { outer, inner, vertical };
+  try {
+    const lengthBeforeMutation =
+      GameController.getShips()[
+        GameController.getPlayerGameBoard().ships.length
+      ].length;
+    GameController.placePlayerShips(coordinates);
+    if (
+      GameController.getPlayerGameBoard().ships.length ===
+      GameController.getShips().length
+    ) {
+      const cells = document.querySelectorAll(`[owner="player"]`);
+      cells.forEach((cell) => {
+        cell.removeEventListener("mouseover", highLightShip);
+        cell.removeEventListener("click", placeShip);
+      });
+    }
+    colorCells(coordinates, lengthBeforeMutation);
+  } catch (e) {
+    console.log(e.message);
+  }
+}
 function handleWinStatus(win) {
   if (win === true) {
     const winnerElement = document.querySelector(".winner");
@@ -98,4 +141,87 @@ function resetGame() {
   boards.textContent = "";
   GameController.resetGame();
   createGameBoard();
+}
+function colorCells(coordinates, length) {
+  removeHighLight();
+  if (coordinates.vertical === true) {
+    for (let i = 0; i < length; i++) {
+      const cell = document.querySelector(
+        `[outer="${coordinates.outer + i}"][inner="${
+          coordinates.inner
+        }"][owner="player"]`,
+      );
+      cell.style.setProperty("background-color", "green");
+      cell.setAttribute("placed", "true");
+      cell.removeEventListener("mouseover", highLightShip);
+      cell.removeEventListener("click", placeShip);
+    }
+  } else {
+    for (let i = 0; i < length; i++) {
+      const cell = document.querySelector(
+        `[outer="${coordinates.outer}"][inner="${
+          coordinates.inner + i
+        }"][owner="player"]`,
+      );
+      cell.style.setProperty("background-color", "green");
+      cell.setAttribute("placed", "true");
+      cell.removeEventListener("mouseover", highLightShip);
+      cell.removeEventListener("click", placeShip);
+    }
+  }
+}
+function highLightShip(e) {
+  removeHighLight();
+  const outer = Number(e.target.getAttribute("outer"));
+  const inner = Number(e.target.getAttribute("inner"));
+  const playerGameBoard = GameController.getPlayerGameBoard();
+  const ships = GameController.getShips();
+  const length = ships[playerGameBoard.ships.length].length;
+  const axis = document.querySelector(`[axis]`).getAttribute("axis");
+  if (axis === "horizontal") {
+    if (
+      playerGameBoard.board[outer] !== undefined &&
+      playerGameBoard.board[outer][inner + length - 1] !== undefined
+    ) {
+      for (let i = 0; i < length; i++) {
+        const cell = document.querySelector(
+          `[outer="${outer}"][inner="${inner + i}"][owner="player"]`,
+        );
+        if (cell.getAttribute("placed") !== "true") {
+          cell.style.setProperty("background-color", "blue");
+          cell.setAttribute("onHold", true);
+        }
+      }
+    }
+  } else {
+    if (playerGameBoard.board[outer + length - 1] !== undefined) {
+      for (let i = 0; i < length; i++) {
+        const cell = document.querySelector(
+          `[outer="${outer + i}"][inner="${inner}"][owner="player"]`,
+        );
+        if (cell.getAttribute("placed") !== "true") {
+          cell.style.setProperty("background-color", "blue");
+          cell.setAttribute("onHold", true);
+        }
+      }
+    }
+  }
+}
+
+function removeHighLight() {
+  const highLightedCells = document.querySelectorAll(`[onHold="true"]`);
+  highLightedCells.forEach((highLightedCell) => {
+    highLightedCell.style.setProperty("background-color", "white");
+    highLightedCell.setAttribute("onHold", false);
+  });
+}
+
+function changeAxis(e) {
+  if (e.target.getAttribute("axis") === "vertical") {
+    e.target.textContent = "Toggle Vertical";
+    e.target.setAttribute("axis", "horizontal");
+  } else {
+    e.target.textContent = "Toggle Horizontal";
+    e.target.setAttribute("axis", "vertical");
+  }
 }
