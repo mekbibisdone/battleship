@@ -1,2 +1,2 @@
 # battleship
-Live: https://mekbibdev.github.io/battleship/
+Live: [Link](https://mekbibisdone.github.io/battleship/)
